@@ -1,0 +1,51 @@
+# vim: ft=sh 
+#                       
+#                                     
+#        __           __  __
+#   ____/ /___  _____/ /_/ /
+#  / __  / __ \/ ___/ __/ / 
+# / /_/ / /_/ / /__/ /_/ /  
+# \__,_/\____/\___/\__/_/   
+#                           
+#
+_doctl() {
+  local cur prev opts base
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+	commands="account whoami action domain dns droplet region size keys help"
+	help_lookup=$commands
+
+  # account, whoami      Account commands.
+  # action, a            Action commands.
+  # domain, dns          Domain commands.
+  # droplet, d           Droplet commands. Lists by default.
+  # region               Region commands.
+  # size                 Size commands.
+  # sshkey, ssh, keys    SSH Key commands.
+  # help, h              Shows a list of commands or help for one command
+
+	case "${prev}" in
+		help )
+			args=$(for word in $help_lookup;do echo "$word";done)
+			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+			return 0
+			;;
+    action )
+      args="list show $(doctl action list|awk '{if (NR!=1) {print $5}}')"
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
+      # doctl action list|awk '{if (NR!=1) {print $5}}'
+
+	esac
+  
+  # doctl list-units |awk '{print $1}'|sed 1d
+
+  COMPREPLY=($(compgen -W "${commands}" -- "${cur}"))
+  return 0
+}
+
+complete -F _doctl doctl
+
