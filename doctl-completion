@@ -28,7 +28,32 @@ _doctl() {
 
 	case "${prev}" in
     show )
-      args=$(doctl action list|awk '{if (NR!=1) {print $1}}')
+      secn="${COMP_WORDS[COMP_CWORD-2]}"
+      if [ ${secn} == "action" ]; then 
+        args=$(doctl action list|awk '{if (NR!=1) {print $1}}')
+      elif [ ${secn} == "domain" ]; then 
+        args=$(doctl domain|awk '{if (NR!=1) {print $1}}') 
+      fi
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
+    list|find|destroy|reboot|power_cycle|off|on|password_reset|resize)
+      args=$(doctl droplet|awk '{if (NR!=1) {print $2}}')
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
+    domain )
+      args="show list create destroy records record add destroy-record" 
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
+    keys )
+      args="create list show destroy" 
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
+    droplet )
+      args="create list find destroy reboot power_cycle off on password_reset resize" 
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
