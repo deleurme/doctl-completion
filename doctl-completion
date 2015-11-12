@@ -14,7 +14,7 @@ _doctl() {
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-	commands="account whoami action domain dns droplet region size keys help"
+	commands="account whoami action domain droplet region size keys help"
 	help_lookup=$commands
 
   # account, whoami      Account commands.
