@@ -42,27 +42,27 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    domain )
+    domain|dns)
       args="show list create destroy records record add destroy-record" 
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    keys )
+    keys|sshkey|ssh)
       args="create list show destroy" 
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    droplet )
+    droplet|d)
       args="create list find destroy reboot power_cycle off on password_reset resize" 
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-		help )
+		help|h)
 			args=$(for word in $help_lookup;do echo "$word";done)
 			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
 			return 0
 			;;
-    action )
+    action|a )
       args="list show $(doctl action list|awk '{if (NR!=1) {print $5}}')"
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
