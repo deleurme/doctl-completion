@@ -67,12 +67,8 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-      # doctl action list|awk '{if (NR!=1) {print $5}}'
-
 	esac
   
-  # doctl list-units |awk '{print $1}'|sed 1d
-
   COMPREPLY=($(compgen -W "${commands}" -- "${cur}"))
   return 0
 }
