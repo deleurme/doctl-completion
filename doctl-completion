@@ -18,21 +18,22 @@ _doctl() {
 	help_lookup=$commands
 	commands="$commands -t --access-token -o --output --trace -v --verbose"
 
-  # account, whoami      Account commands.
-  # action, a            Action commands.
-  # domain, dns          Domain commands.
-  # droplet, d           Droplet commands. Lists by default.
-  # region               Region commands.
-  # size                 Size commands.
-  # sshkey, ssh, keys    SSH Key commands.
-  # help, h              Shows a list of commands or help for one command
-
 	case "${prev}" in
-    show )
+    get)
       secn="${COMP_WORDS[COMP_CWORD-2]}"
-      if [ ${secn} == "action" ]; then 
-        args=$(doctl action list|awk '{if (NR!=1) {print $1}}')
-      elif [ ${secn} == "domain" ]; then 
+      if [ ${secn} == "compute" ]; then 
+        args="get list wait"
+      elif [ ${secn} == "droplet" ]; then 
+        args=$(doctl compute droplet list --format ID|sed 1d)
+      fi
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
+    action)
+      secn="${COMP_WORDS[COMP_CWORD-2]}"
+      if [ ${secn} == "compute" ]; then 
+        args="get list wait"
+      elif [ ${secn} == "droplet" ]; then 
         args=$(doctl domain|awk '{if (NR!=1) {print $1}}') 
       fi
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
@@ -68,7 +69,7 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    actions|backup|snapshots|neighbours|kernels|delete|get|disable-backups|reboot|power-cycle|shutdown|power-off|power-on|power-reset|enable-ipv6|enable-private-networking|upgrade|restore|resize|rebuild|rename|change-kernel|snapshot)
+    actions|backup|snapshots|neighbours|kernels|delete|disable-backups|reboot|power-cycle|shutdown|power-off|power-on|power-reset|enable-ipv6|enable-private-networking|upgrade|restore|resize|rebuild|rename|change-kernel|snapshot)
       args=$(doctl compute droplet list --format ID|sed 1d)
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
@@ -100,6 +101,11 @@ _doctl() {
 			;;
 		--size)
       args="512mb 1gb 2gb 4gb 8gb 16gb 32gb 48gb 64gb "
+			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+			return 0
+			;;
+		ssh-key )
+      args="list get create import delete update"
 			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
 			return 0
 			;;
