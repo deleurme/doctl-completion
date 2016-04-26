@@ -43,7 +43,7 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    domain )
+    domain|dns)
       args="show list create destroy records record add destroy-record" 
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
@@ -83,7 +83,7 @@ _doctl() {
 			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
 			return 0
 			;;
-    action )
+    action|a )
       args="list show $(doctl action list|awk '{if (NR!=1) {print $5}}')"
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
