@@ -14,8 +14,9 @@ _doctl() {
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-	commands="account whoami action domain droplet region size keys help"
+	commands="account auth compute version whoami action domain droplet region size keys help"
 	help_lookup=$commands
+	commands="$commands -t --access-token -o --output --trace -v --verbose"
 
   # account, whoami      Account commands.
   # action, a            Action commands.
@@ -47,6 +48,16 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
+    account)
+      args="get ratelimit" 
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
+    --output|-o)
+      args="json text" 
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
     keys )
       args="create list show destroy" 
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
@@ -57,6 +68,11 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
+		account )
+			args=$(for word in $help_lookup;do echo "$word";done)
+			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+			return 0
+			;;
 		help )
 			args=$(for word in $help_lookup;do echo "$word";done)
 			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
@@ -74,4 +90,6 @@ _doctl() {
 }
 
 complete -F _doctl doctl
+
+
 
