@@ -10,3 +10,7 @@ Tested on Ubuntu, Debian Coreos and OSX.
 ## Usage 
 
 `doctl <tab>` 
+
+## Notes
+
+Now works with version 1.0.2.
