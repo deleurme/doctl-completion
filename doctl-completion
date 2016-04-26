@@ -14,7 +14,7 @@ _doctl() {
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-	commands="account auth compute version whoami action domain droplet region size keys help"
+	commands="account auth compute version"
 	help_lookup=$commands
 	commands="$commands -t --access-token -o --output --trace -v --verbose"
 
@@ -58,13 +58,18 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    keys )
-      args="create list show destroy" 
+    droplet|d)
+      args="actions backups create delete get kernels list neighbors snapshots"
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    droplet )
-      args="create list find destroy reboot power_cycle off on password_reset resize" 
+    actions|backup|snapshots|neighbours|kernels)
+      args=$(doctl compute droplet list --format ID|sed 1d)
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
+    compute) 
+      args="action droplet-action droplet domain floating-ip floating-ip-action image image-action plugin region size ssh-key ssh"
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
@@ -90,6 +95,7 @@ _doctl() {
 }
 
 complete -F _doctl doctl
+
 
 
 
