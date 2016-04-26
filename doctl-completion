@@ -43,8 +43,8 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    domain|dns)
-      args="show list create destroy records record add destroy-record" 
+    domain)
+      args="list create get delete records" 
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
@@ -58,12 +58,17 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
+    droplet-action|da)
+      args="get disable-backups reboot power-cycle shutdown power-off power-on power-reset enable-ipv6 enable-private-networking upgrade restore resize rebuild rename change-kernel snapshot"
+      COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+      return 0
+      ;;
     droplet|d)
       args="actions backups create delete get kernels list neighbors snapshots"
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-    actions|backup|snapshots|neighbours|kernels)
+    actions|backup|snapshots|neighbours|kernels|delete|get|disable-backups|reboot|power-cycle|shutdown|power-off|power-on|power-reset|enable-ipv6|enable-private-networking|upgrade|restore|resize|rebuild|rename|change-kernel|snapshot)
       args=$(doctl compute droplet list --format ID|sed 1d)
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
@@ -73,13 +78,33 @@ _doctl() {
       COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
       return 0
       ;;
-		account )
-			args=$(for word in $help_lookup;do echo "$word";done)
+		create)
+      args="--region --image --size --enable-backups --enable-ipv6 --enable-private-networking --format -h --image --no-header --region --size --ssh-keys --user-data --user-data-file --wait"
 			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
 			return 0
 			;;
-		help )
-			args=$(for word in $help_lookup;do echo "$word";done)
+		image)
+      args="list list-distribution list-application list-user get update delete" 
+			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+			return 0
+			;;
+		--image)
+      args="16993769 6372321 6372425 10144573 12065782 13321858 14238961 14782899 14782952 15611095 15621569 15621816 15621817 15943196 15943270 15943510 15943679 16040476 16071652 16071743 16082940 16623283 16623308 16640534 16675144 16906135 16906147 13413549 13764801 14147698 15942020 15973046 16089764 16089776 16170924 16285601 16376426 16402180 16529767 16530664 16539180 16539246 16572212 16657436 16744475 16753596 16753867 16774324 16778952 16796480 16936413 16937126 12438838 14782810 14782991 14782994 14782999" 
+			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+			return 0
+			;;
+		--region)
+      args="nyc1 sfo1 nyc2 ams2 sgp1 lon1 nyc3 ams3 fra1 tor1" 
+			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+			return 0
+			;;
+		--size)
+      args="512mb 1gb 2gb 4gb 8gb 16gb 32gb 48gb 64gb "
+			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
+			return 0
+			;;
+		ssh )
+      args=$(doctl compute droplet list --format ID|sed 1d)
 			COMPREPLY=( $(compgen -W "${args}" -- "${cur}") )
 			return 0
 			;;
